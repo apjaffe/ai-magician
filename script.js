@@ -81,6 +81,9 @@ function handleStart(evt) {
     for(var i = 0; i < touches.length; i++) {
         touchesById[touches[i].identifier] = {"x":touches[i][EFF_COORD], "pos":pos, "time": +new Date()};
     }
+    if(fixedPos === null) {
+        do_query("participant");
+    }
 }
 function handleEnd(evt) {
     evt.preventDefault();
@@ -114,23 +117,23 @@ function handleMove(evt) {
     }
 }
 
+function do_query(value) {
+    var url = "http://35.229.19.246:9000/set_secret_value/"+value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+           fixedPos = rpos;
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+
 function init() {
     document.getElementById("pick").onclick = function() {
         if(Math.abs(pos-Math.round(pos))<=0.4) {
             var rpos = Math.round(pos);
-            var url = "http://35.229.19.246:9000/set_secret_value/"+shuffle[rpos];
-            
-            //document.getElementById("ping").src = url;
-
-            
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                   fixedPos = rpos;
-                }
-            };
-            xhttp.open("GET", url, true);
-            xhttp.send();
+            do_query(shuffle[rpos]);
         }
     }
 }

@@ -28,11 +28,11 @@ def tts(text, filename):
 
 
 sentences = {
-    #"intro": "Welcome, welcome, and be prepare to be amazed by a world first. An artificial intelligence magician. The first thing I need is a volunteer.",
-    #"pick_card": "Great, now if you could just swipe through that virtual deck and pick out a card please!",
-    #"excellent": "Excellent choice. Of course, do not show it to me or my assistant Alan. Make sure the whole audience can see it please!",
-    #"mind_read": "First, I will read your mind. Please stand still! And focus on the card, not on your lunch. Ah okay, now it's coming through better. Well done, human.",
-    #"stall": "I really hope this trick works this time. Otherwise they might have to rename me to artificial stupidity instead of artificial intelligence.",
+    "intro": "Welcome, welcome, and be prepare to be amazed by a world first. An artificial intelligence magician. The first thing I need is a volunteer.",
+    "pick_card": "Great, now if you could just swipe through that virtual deck and pick out a card please!",
+    "excellent": "Excellent choice. Of course, do not show it to me or my assistant Alan. Make sure the whole audience can see it please!",
+    "mind_read": "First, I will read your mind. Please stand still! And focus on the card, not on your lunch. Ah okay, now it's coming through better. Well done, human.",
+    "stall": "I really hope this trick works this time. Otherwise they might have to rename me to artificial stupidity instead of artificial intelligence.",
     "assistant": "Okay now that I did the hard mind reading part, I'll let me assistant finish up the easy part. Usually humans mess everything up."
 }
 
