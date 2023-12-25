@@ -57,9 +57,10 @@ var suits = ["spades","clubs","hearts","diamonds"];
 var shuffle = [];
 var pos = 26;
 var velocity = 0;
+var fixedPos = null;
 for(var num = 1; num <= 13; num++) {
     for(var suit = 0; suit < suits.length; suit++) {
-        var card = suits[suit]+num;
+        var card = suits[suit]+"_"+num;
         cards[card] = new ImageData("img/cards/"+num+"_of_"+suits[suit]+".png");
         shuffle.push(card);
     }
@@ -105,7 +106,7 @@ function handleMove(evt) {
             var prevPos = prevCoord.pos;
             var prevX = prevCoord.x;
             var prevTime = prevCoord.time;
-            pos = clamp((touches[i][EFF_COORD] - prevX)*-0.02 + prevPos, 0, shuffle.length-1); 
+            pos = clamp((touches[i][EFF_COORD] - prevX)*-0.007 + prevPos, 0, shuffle.length-1); 
             velocity = (pos-prevPos)/(now-prevTime);
             break;
         }
@@ -113,19 +114,55 @@ function handleMove(evt) {
     }
 }
 
+function init() {
+    document.getElementById("pick").onclick = function() {
+        if(Math.abs(pos-Math.round(pos))<=0.4) {
+            var rpos = Math.round(pos);
+            var url = "http://35.229.19.246:9000/set_secret_value/"+shuffle[rpos];
+            
+            //document.getElementById("ping").src = url;
+
+            
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                   fixedPos = rpos;
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    }
+}
 
 function startup() {
+
+    
     canvas.addEventListener("touchstart", handleStart);
     canvas.addEventListener("touchend", handleEnd);
     canvas.addEventListener("touchcancel", handleCancel);
     canvas.addEventListener("touchmove", handleMove);
     setInterval(function() {
-        //pos = clamp(pos+velocity/60, 0, shuffle.length-1);
-        //velocity *= 0.99;
-        
         function renderCard(i) {
             var img = cards[shuffle[i]];
-            var offset = Math.pow(Math.max(Math.abs(i-pos)-0.4,0), 0.3)*sign(i-pos);
+            var offset = 0;
+            var aof = Math.abs(i-pos);
+            if(aof > 0.4) {
+                offset += clamp(aof,0.4,2)*0.6;
+            }
+            if(aof > 0.8) {
+                offset += clamp(aof-0.8,0,100)*0.01;
+            }
+            /*if(aof > 3) {
+                offset += clamp(aof,3,100)*0.01;
+            }*/
+            offset*=sign(i-pos);
+            
+            /*if(Math.abs(i-pos) < 2) {
+                var offset = Math.pow(Math.max(Math.abs(i-pos)-0.4,0), 0.3)*sign(i-pos);
+            } else {
+                var offset = (Math.pow(1.6, 0.3) + Math.pow(Math.max(Math.abs(i-pos)-2.4,0), 0.1))*sign(i-pos);
+            }*/
             
             var x = offset*CARD_WID*0.8+0.5*EFF_WID-CARD_WID/2;
             var y=0.5*EFF_HEI-CARD_HEI/2;
@@ -138,8 +175,32 @@ function startup() {
             }
         }
         
+        
+        //pos = clamp(pos+velocity/60, 0, shuffle.length-1);
+        //velocity *= 0.99;
+        
         ctx.fillStyle = '#FFF';
         ctx.fillRect(0,0,WID,HEI);
+        
+        
+        if(fixedPos !== null) {
+            pos = fixedPos;
+            renderCard(fixedPos);
+            document.getElementById("pick").style.display="none";
+            return;
+        }
+        
+
+        if(Math.abs(pos-Math.round(pos))>0.4) {
+            document.getElementById("pick").style.backgroundColor = "#EEEEEE";
+            document.getElementById("pick").style.color = "#DDDDDD";
+        } else {
+            document.getElementById("pick").style.backgroundColor = "#BBBBBB";
+            document.getElementById("pick").style.color = "#000000";
+        }
+        
+        
+        
         //for(var i = clamp(Math.round(pos)-8,0,51); i < clamp(Math.round(pos)+8,0,52); i++) {
         var rpos = Math.round(pos);
         for(var i = 0; i < rpos; i++) {
@@ -151,6 +212,7 @@ function startup() {
     }, 16);
 }
 startup();
+window.onload = init;
 
 
             /*if(i>=pos) {
