@@ -7,7 +7,10 @@ from pydub.playback import play
  
 def playsound(filename):
     print(f"playing {filename}")
-    song = AudioSegment.from_wav(filename)
+    if filename.endswith(".wav"):
+        song = AudioSegment.from_wav(filename)
+    else:
+        song = AudioSegment.from_mp3(filename)
     play(song)
     print('done')
 
@@ -58,15 +61,20 @@ val_set("null")
 
 while val_get() != "null":
     time.sleep(1)
-    
+
+playsound('audio/mysterious-celesta-114064.wav')
 playsound('audio/intro.wav')
-input("Press enter to continue.")
+while val_get() != "participant":
+    time.sleep(1)
+
+print("found participant")
+time.sleep(4)
+
 playsound('audio/pick_card.wav')
 while True:
     card = val_get()
-    print(card)
-    time.sleep(2)
-    if card!="null":
+    time.sleep(1)
+    if card not in ("null", "participant"):
         time.sleep(4)
         break
 print(card)
@@ -77,3 +85,4 @@ playsound(card_audio)
 playsound('audio/mind_read.wav')
 playsound('audio/stall.wav')
 playsound('audio/assistant.wav')
+playsound('audio/let-the-mystery-unfold-122118.wav')

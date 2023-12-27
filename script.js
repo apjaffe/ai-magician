@@ -170,7 +170,7 @@ function startup() {
             }*/
             
             var x = offset*CARD_WID*0.8+0.5*EFF_WID-CARD_WID/2;
-            var y=0.5*EFF_HEI-CARD_HEI/2;
+            var y=0.5*EFF_HEI-CARD_HEI*0.7;
             var angle=clamp(-offset*Math.PI*0.1, Math.PI*-0.5, Math.PI*0.5);
             if (img.img) {
                 ctx.translate(x+CARD_WID/2,y);
