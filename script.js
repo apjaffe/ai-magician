@@ -118,8 +118,10 @@ function handleMove(evt) {
 }
 
 function do_query(value, cb) {
-    var url = "http://35.229.19.246:9000/set_secret_value/"+value;
-    var xhttp = new XMLHttpRequest();
+    //var url = "http://35.229.19.246:9000/set_secret_value/"+value;
+    var url = "https://msgr.tellbudgetbot.com:9000/set_secret_value/"+value;
+    
+	var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
            cb();

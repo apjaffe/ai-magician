@@ -14,7 +14,8 @@ def playsound(filename):
     play(song)
     print('done')
 
-url = "http://35.229.19.246:9000"
+#url = "http://35.229.19.246:9000"
+url = "https://msgr.tellbudgetbot.com:9000"
 
 def val_get():
     return requests.get(url + "/get").text
